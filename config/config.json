@@ -1,0 +1,36 @@
+{
+  "thresholds": {
+    "do_low_mg_l": 4.0,
+    "do_high_mg_l": 5.5,
+    "temp_min_c": 26,
+    "temp_max_c": 32,
+    "temp_cooling_off_c": 30,
+    "ph_min": 6.5,
+    "ph_max": 8.5,
+    "tds_max_ppm": 800
+  },
+  "pump": {
+    "pulse_seconds": 5,
+    "wait_after_pulse_seconds": 30,
+    "max_total_seconds_per_hour": 60
+  },
+  "model": {
+    "k_aeration": 0.05,
+    "fish_count": 20,
+    "o2_per_fish_mg_l_per_step": 0.004,
+    "temp_factor_per_c": 0.05
+  },
+  "alerts": {
+    "cooldown_minutes": 10,
+    "repeat_minutes": 30
+  },
+  "device_safety": {
+    "esp32_offline_aerator_on_after_seconds": 60,
+    "min_run_seconds": 30,
+    "max_switches_per_hour": 20
+  },
+  "sampling": {
+    "interval_seconds": 5,
+    "tds_settle_seconds": 2
+  }
+}
