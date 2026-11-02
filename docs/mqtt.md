@@ -36,3 +36,11 @@ Thêm cảm biến mực nước:
 ## 4. Cơ sở dữ liệu
 
 Bảng `readings` có các cột cố định `ts, temp, ph, tds, do_est` và một cột `extra` kiểu văn bản chứa JSON cho mọi số đo khác. Thêm cảm biến mới không phải sửa cấu trúc bảng.
+
+## 5. Ghi chú các trường
+
+- `ts`: giây Unix.
+- `temp`: °C, đọc từ DS18B20.
+- `ph`: đơn vị pH, đã hiệu chuẩn.
+- `tds`: ppm, đã bù nhiệt.
+- Bơm tự tắt sau `seconds` giây, kể cả khi mất kết nối.

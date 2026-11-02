@@ -1,6 +1,23 @@
-.env 
-firmware/pond_node/secrets.h 
-.venv/ 
-__pycache__/ 
-data/* 
-!data/.gitkeep 
+# Bí mật (không bao giờ commit)
+.env
+firmware/pond_node/secrets.h
+
+# Dữ liệu chạy
+data/*
+!data/.gitkeep
+*.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Blender (file .blend để trên Drive, chỉ commit .glb)
+*.blend
+*.blend1
+
+# Hệ điều hành, trình soạn thảo
+.DS_Store
+Thumbs.db
+.idea/
