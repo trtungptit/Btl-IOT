@@ -1,0 +1,6 @@
+.env 
+firmware/pond_node/secrets.h 
+.venv/ 
+__pycache__/ 
+data/* 
+!data/.gitkeep 
