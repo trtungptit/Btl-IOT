@@ -1,0 +1,59 @@
+{
+  "config_version": 1,
+
+  "mqtt": { "host": "localhost", "port": 1883, "base_topic": "pond1" },
+
+  "sampling": { "period_s": 5, "tds_settle_s": 2 },
+
+  "sensors": [
+    {
+      "id": "temp",
+      "label": "Nhiệt độ",
+      "unit": "°C",
+      "enabled": true,
+      "valid_range": [0, 50],
+      "warn_range": [26, 32]
+    },
+    {
+      "id": "ph",
+      "label": "pH",
+      "unit": "",
+      "enabled": true,
+      "valid_range": [0, 14],
+      "warn_range": [6.5, 8.5]
+    },
+    {
+      "id": "tds",
+      "label": "TDS",
+      "unit": "ppm",
+      "enabled": true,
+      "valid_range": [0, 5000],
+      "warn_range": [0, 800]
+    }
+  ],
+
+  "do_model": {
+    "aerator_on_below": 4.0,
+    "aerator_off_above": 5.5,
+    "fish_count": 20
+  },
+
+  "pump": {
+    "cool_on_above_c": 32,
+    "cool_off_below_c": 30,
+    "burst_s": 5,
+    "wait_s": 30,
+    "max_s_per_hour": 60
+  },
+
+  "control": { "manual_pause_s": 300, "esp32_offline_failsafe_s": 60 },
+
+  "telegram": { "cooldown_s": 600 },
+
+  "pond_geometry_m": {
+    "length": 0.6,
+    "width": 0.4,
+    "height": 0.3,
+    "water_level_fixed_m": null
+  }
+}
