@@ -8,7 +8,6 @@ Làm 3 việc giống hệt ESP32 thật sẽ làm:
 
 Phím điều khiển (gõ chữ rồi bấm Enter):
   n  = đổ nước ấm (nhiệt độ tăng ~4 °C)
-  m  = pha muối   (TDS tăng ~300 ppm)
   s  = in trạng thái hiện tại
   q  = thoát
 
@@ -18,11 +17,17 @@ Chạy từ thư mục gốc repo, .venv đã kích hoạt:
 
 import json
 import random
+import sys
 import threading
 import time
 from pathlib import Path
 
 import paho.mqtt.client as mqtt
+
+# Windows mặc định in bằng bảng mã cp1252 (không có chữ tiếng Việt) -> print tiếng Việt bị lỗi.
+# Ép in bằng UTF-8; ký tự terminal không hiện được thì thay bằng "?" chứ không báo lỗi.
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 # ---------- Đọc cấu hình chung (không viết cứng số trong code) ----------
 CONFIG_PATH = Path(__file__).resolve().parent.parent / "config" / "config.json"
@@ -46,7 +51,7 @@ ROOM_TEMP_C = 27.0       # nhiệt độ phòng, nước tự nguội dần về
 pond = {
     "temp": 27.0,        # °C
     "ph": 7.2,
-    "tds": 250.0,        # ppm
+    # Đã bỏ cảm biến TDS (08/11/2026): simulator không gửi khoá "tds" nữa
 }
 devices = {
     "aerator": False,    # máy sục khí
@@ -120,13 +125,11 @@ def update_pond(dt):
     with lock:
         # Nước tự nguội/ấm dần về nhiệt độ phòng (chậm)
         pond["temp"] += (ROOM_TEMP_C - pond["temp"]) * 0.002 * dt
-        # Bơm chạy: bơm nước mát từ xô vào, nhiệt độ và TDS giảm nhẹ
+        # Bơm chạy: bơm nước mát từ xô vào, nhiệt độ giảm nhẹ
         if devices["pump"]:
             pond["temp"] -= 0.15 * dt
-            pond["tds"] -= 3.0 * dt
         # pH dao động nhỏ quanh 7.2
         pond["ph"] += (7.2 - pond["ph"]) * 0.05 * dt
-        pond["tds"] = max(0.0, pond["tds"])
 
 
 def read_sensors():
@@ -137,13 +140,12 @@ def read_sensors():
             "ts": int(time.time()),   # giây kể từ 1/1/1970 (Unix time)
             "temp": round(pond["temp"] + random.uniform(-0.05, 0.05), 2),
             "ph": round(pond["ph"] + random.uniform(-0.02, 0.02), 2),
-            "tds": round(pond["tds"] + random.uniform(-2, 2), 1),
         }
 
 
 # ---------- Luồng đọc bàn phím ----------
 def keyboard_loop(client, stop_event):
-    print("Phím: n = nước ấm, m = pha muối, s = trạng thái, q = thoát (gõ rồi Enter)")
+    print("Phím: n = nước ấm, s = trạng thái, q = thoát (gõ rồi Enter)")
     while not stop_event.is_set():
         try:
             key = input().strip().lower()
@@ -153,9 +155,6 @@ def keyboard_loop(client, stop_event):
             if key == "n":
                 pond["temp"] += 4.0
                 print(f"[phím  ] Đổ nước ấm -> temp ~ {pond['temp']:.1f} °C")
-            elif key == "m":
-                pond["tds"] += 300.0
-                print(f"[phím  ] Pha muối -> tds ~ {pond['tds']:.0f} ppm")
             elif key == "s":
                 print(f"[ao    ] {pond}  thiết bị: {devices}")
             elif key == "q":
