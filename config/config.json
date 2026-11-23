@@ -12,7 +12,7 @@
       "unit": "°C",
       "enabled": true,
       "valid_range": [0, 50],
-      "warn_range": [26, 32]
+      "warn_range": [24, 36]
     },
     {
       "id": "ph",
@@ -20,30 +20,34 @@
       "unit": "",
       "enabled": true,
       "valid_range": [0, 14],
-      "warn_range": [6.5, 8.5]
+      "warn_range": [7.0, 8.5]
     },
     {
       "id": "tds",
       "label": "TDS",
       "unit": "ppm",
-      "enabled": true,
+      "enabled": false,
       "valid_range": [0, 5000],
       "warn_range": [0, 800]
     }
   ],
 
   "do_model": {
-    "aerator_on_below": 4.0,
+    "aerator_on_below": 3.0,
     "aerator_off_above": 5.5,
-    "fish_count": 20
+    "aerator_k_per_s": 0.04,
+    "uptake_ref_mg_per_l_per_s": 0.024,
+    "uptake_ref_temp_c": 25,
+    "uptake_q10": 2.0
   },
 
   "pump": {
-    "cool_on_above_c": 32,
-    "cool_off_below_c": 30,
-    "burst_s": 5,
-    "wait_s": 30,
-    "max_s_per_hour": 60
+    "cool_on_above_c": 31,
+    "cool_off_below_c": 30.5,
+    "burst_s": 10,
+    "wait_s": 10,
+    "max_s_per_hour": 60,
+    "renew_s": 15
   },
 
   "control": { "manual_pause_s": 300, "esp32_offline_failsafe_s": 60 },
