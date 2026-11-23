@@ -21,3 +21,8 @@ venv/
 .DS_Store
 Thumbs.db
 .idea/
+
+# Tài liệu nội bộ (không đăng lên GitHub, chỉ giữ trên máy)
+CLAUDE.md
+docs/ke-hoach-phan-mem.md
+docs/tai-lieu-bao-cao.md
