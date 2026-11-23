@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Digital Twin ao nuôi cá rô phi</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Chart.js: số phiên bản được ghim cố định (4.4.1) để thư viện cập nhật không làm hỏng trang -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Three.js (0.160.0) dùng kiểu ES module. "importmap" cho trình duyệt biết
+       chữ "three" trong app.js ứng với địa chỉ nào, nên không cần build. -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <header class="topbar">
+    <h1>Digital Twin ao nuôi cá rô phi</h1>
+    <div class="topbar-right">
+      <span id="overall-level" class="badge level-unknown">Mức cảnh báo: chưa có dữ liệu</span>
+      <span id="conn-status" class="badge conn-bad">Đang kết nối...</span>
+      <span id="last-update" class="muted"></span>
+    </div>
+  </header>
+
+  <!-- Dòng thông báo lỗi/thông tin (ví dụ lỗi khi bấm nút). Ẩn khi trống. -->
+  <div id="notice" class="notice" role="status" hidden></div>
+
+  <main>
+    <!-- Cột trái: mô hình 3D -->
+    <section class="panel scene-panel">
+      <h2>Bản sao số của ao nuôi</h2>
+      <div id="scene" aria-label="Mô hình 3D ao nuôi"></div>
+      <p class="muted small">
+        Mặt cắt ngang ao, nhìn từ phía trước. Màu nước đổi theo mức cảnh báo.
+        Bọt khí và viên đá sục xanh lá = máy sục BẬT; nước chảy xuống và ống xanh dương = bơm BẬT
+        (theo trạng thái thật ESP32 báo về).
+      </p>
+    </section>
+
+    <!-- Cột phải: thẻ số đo + điều khiển -->
+    <section class="side">
+      <div class="panel">
+        <h2>Số đo hiện tại</h2>
+        <div id="cards" class="cards"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Điều khiển tay</h2>
+        <div class="control-row">
+          <div>
+            <strong>Máy sục khí</strong>
+            <div id="aerator-state" class="muted">Chưa có trạng thái từ ESP32</div>
+          </div>
+          <button id="btn-aerator" type="button" disabled>Bật sục khí</button>
+        </div>
+        <div class="control-row">
+          <div>
+            <strong>Bơm làm mát</strong>
+            <div id="pump-state" class="muted">Chưa có trạng thái từ ESP32</div>
+          </div>
+          <button id="btn-pump" type="button" disabled>Bật bơm</button>
+        </div>
+        <p class="muted small">
+          Bấm nút chỉ gửi lệnh. Trạng thái trên màn hình chỉ đổi khi ESP32 báo lại.
+          Điều khiển tay sẽ tạm dừng chế độ tự động một lúc.
+        </p>
+      </div>
+    </section>
+
+    <!-- Hàng dưới: biểu đồ (app.js tự tạo mỗi biểu đồ một khung) -->
+    <section class="panel charts-panel">
+      <h2>Biểu đồ 60 phút gần nhất</h2>
+      <div id="charts" class="charts"></div>
+    </section>
+  </main>
+
+  <footer class="muted small">
+    DO (oxy hoà tan) là giá trị <strong>ước tính</strong> từ mô hình, không phải cảm biến đo thật.
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
